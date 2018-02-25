@@ -9,7 +9,7 @@ const camelCase = "[A-Z]?[^A-Z]*"
 
 // GetTitle extracts a title from the function name,
 // where longFnName is of the form:
-// github.com/adams-sarah/test2doc/example.GetWidget
+// github.com/cj123/test2doc/example.GetWidget
 // and the out title would be:
 // Handle Get Widget
 func GetTitle(longFnName string) string {

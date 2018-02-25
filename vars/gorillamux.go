@@ -3,7 +3,7 @@ package vars
 import (
 	"net/http"
 
-	"github.com/adams-sarah/test2doc/doc/parse"
+	"github.com/cj123/test2doc/doc/parse"
 	"github.com/gorilla/mux"
 )
 

@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/adams-sarah/prettytest"
-	"github.com/adams-sarah/test2doc/test"
-	"github.com/adams-sarah/test2doc/vars"
+	"github.com/cj123/test2doc/test"
+	"github.com/cj123/test2doc/vars"
 	"github.com/gorilla/mux"
 )
 

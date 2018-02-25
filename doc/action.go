@@ -5,7 +5,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/adams-sarah/test2doc/doc/parse"
+	"github.com/cj123/test2doc/doc/parse"
 )
 
 var (
