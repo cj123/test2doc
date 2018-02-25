@@ -68,7 +68,7 @@ func GorillaMuxHandlerInfo(router *mux.Router) func(r *http.Request) *HandlerInf
 
 			if route.Match(r, &match) {
 				fn := runtime.FuncForPC(reflect.ValueOf(match.Handler).Pointer())
-				handlerInfo = &HandlerInfo{FuncName: strings.Replace(fn.Name(), "-fm", " ", 1)}
+				handlerInfo = &HandlerInfo{FuncName: strings.Replace(fn.Name(), "-fm", "", 1)}
 				return nil
 			}
 
