@@ -29,6 +29,7 @@ func NewPackageDoc(dir string) (*doc.Package, error) {
 	}
 
 	setDocFuncsMap(pkgDoc)
+
 	return pkgDoc, nil
 }
 
@@ -49,9 +50,7 @@ func getPkgTypesFunctions(pkgDoc *doc.Package) map[string]*doc.Func {
 	result := make(map[string]*doc.Func)
 	for _, t := range pkgDoc.Types {
 		for _, f := range t.Methods {
-			if f.Doc != "" {
-				result[fmt.Sprintf("%s.%s", t.Name, f.Name)] = f
-			}
+			result[fmt.Sprintf("%s.%s", t.Name, f.Name)] = f
 		}
 	}
 

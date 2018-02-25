@@ -54,26 +54,20 @@ func IsFuncInPkg(longFnName string) bool {
 // becomes
 //   type.method
 func getShortFnName(longFnName string) string {
+	methodRE := regexp.MustCompile(`/(.*)\.(.*)\.(.*)`)
+	funcRE := regexp.MustCompile(`/(.*)\.(.*)`)
 
-	// drop anything before the last '/'
-	slashed := strings.Split(longFnName, "/")
-	last := slashed[len(slashed)-1]
-
-	// split the final part by period
-	dotted := strings.Split(last, ".")
-
-	// drop the first part which is the package name
-	dotted = dotted[1:]
-
-	// loop over and drop pointer references (*v) => v
-	for i, p := range dotted {
-		if len(p) > 3 {
-			if p[0:2] == "(*" && p[len(p)-1] == ')' {
-				p = p[2 : len(p)-1]
-			}
-		}
-		dotted[i] = p
+	matches := methodRE.FindStringSubmatch(longFnName)
+	if len(matches) > 0 {
+		fnName := strings.Join(matches[len(matches)-2:], ".")
+		fnName = strings.Replace(fnName, "(*", "", -1)
+		return strings.Replace(fnName, ")", "", -1)
 	}
 
-	return strings.Join(dotted, ".")
+	matches = funcRE.FindStringSubmatch(longFnName)
+	if len(matches) > 0 {
+		return matches[len(matches)-1]
+	}
+
+	return ""
 }

@@ -68,7 +68,7 @@ func handleAndRecord(handler http.Handler, outDoc *doc.Doc) http.HandlerFunc {
 
 		// record response
 		rw := httptest.NewRecorder()
-		resp := NewResponseWriter(rw)
+		resp := NewResponseWriter(rw, req)
 
 		handler.ServeHTTP(resp, req)
 
@@ -85,6 +85,7 @@ func handleAndRecord(handler http.Handler, outDoc *doc.Doc) http.HandlerFunc {
 
 		// find action
 		action := resources[path].FindAction(req.Method)
+
 		if action == nil {
 			// make new action
 			action, err = doc.NewAction(req.Method, resp.HandlerInfo.FuncName)

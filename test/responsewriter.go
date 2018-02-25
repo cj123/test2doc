@@ -1,27 +1,21 @@
 package test
 
 import (
-	"github.com/cj123/test2doc/doc/parse"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"runtime"
 )
 
 type ResponseWriter struct {
 	HandlerInfo HandlerInfo
 	URLVars     map[string]string
 	W           *httptest.ResponseRecorder
+	r           *http.Request
 }
 
-type HandlerInfo struct {
-	FileName string
-	FuncName string
-}
-
-func NewResponseWriter(w *httptest.ResponseRecorder) *ResponseWriter {
+func NewResponseWriter(w *httptest.ResponseRecorder, r *http.Request) *ResponseWriter {
 	return &ResponseWriter{
 		W: w,
+		r: r,
 	}
 }
 
@@ -39,38 +33,11 @@ func (rw *ResponseWriter) WriteHeader(c int) {
 }
 
 func (rw *ResponseWriter) setHandlerInfo() {
-	i := 1
-	max := 15
+	handlerInfo := infoFunc(rw.r)
 
-	var pc uintptr
-	var file, fnName string
-	var ok, fnInPkg, sawPkg bool
-
-	// iterate until we find the top level func in this pkg (the handler)
-	for i < max {
-		pc, file, _, ok = runtime.Caller(i)
-		if !ok {
-			log.Println("test2doc: setHandlerInfo: !ok")
-			return
-		}
-
-		fn := runtime.FuncForPC(pc)
-		fnName = fn.Name()
-
-		fnInPkg = parse.IsFuncInPkg(fnName)
-		if sawPkg && !fnInPkg {
-			pc, file, _, ok = runtime.Caller(i - 1)
-			fn := runtime.FuncForPC(pc)
-			fnName = fn.Name()
-			break
-		}
-
-		sawPkg = fnInPkg
-		i++
+	if handlerInfo == nil {
+		return
 	}
 
-	rw.HandlerInfo = HandlerInfo{
-		FileName: file,
-		FuncName: fnName,
-	}
+	rw.HandlerInfo = *handlerInfo
 }
