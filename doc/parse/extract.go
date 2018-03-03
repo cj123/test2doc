@@ -3,9 +3,9 @@ package parse
 import (
 	"regexp"
 	"strings"
-)
 
-const camelCase = "[A-Z]?[^A-Z]*"
+	"github.com/fatih/camelcase"
+)
 
 // GetTitle extracts a title from the function name,
 // where longFnName is of the form:
@@ -15,9 +15,7 @@ const camelCase = "[A-Z]?[^A-Z]*"
 func GetTitle(longFnName string) string {
 	shortFnName := getShortFnName(longFnName)
 
-	re := regexp.MustCompile(camelCase)
-
-	words := re.FindAllString(shortFnName, -1)
+	words := camelcase.Split(shortFnName)
 
 	for i := range words {
 		words[i] = strings.Title(words[i])
