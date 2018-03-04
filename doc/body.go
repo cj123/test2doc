@@ -1,6 +1,7 @@
 package doc
 
 import (
+	"bufio"
 	"strings"
 	"text/template"
 )
@@ -9,7 +10,7 @@ var (
 	bodyTmpl *template.Template
 	bodyFmt  = `    + Body
 
-            {{.FormattedStr}}        
+{{.FormattedStr}}
 `
 )
 
@@ -41,7 +42,15 @@ func (b *Body) FormattedStr() string {
 	if strings.HasPrefix(b.ContentType, "application/json") {
 		return b.FormattedJSON()
 	}
-	return string(b.Content)
+
+	out := ""
+
+	scanner := bufio.NewScanner(strings.NewReader(string(b.Content)))
+	for scanner.Scan() {
+		out += "            " + scanner.Text() + "\n"
+	}
+
+	return out
 }
 
 func (b *Body) FormattedJSON() string {
